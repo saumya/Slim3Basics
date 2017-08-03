@@ -1,0 +1,6 @@
+# Slim 3 
+
+*.phar
+
+/vendor
+
