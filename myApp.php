@@ -3,9 +3,12 @@
 require 'vendor/autoload.php';
 
 // Create and configure Slim app
-$config = ['settings' => ['addContentLengthHeader' => false,]];
+$config = ['settings' => [  'addContentLengthHeader' => false,
+                            'displayErrorDetails'=> true,
+                          ]
+          ];
 
-$config['displayErrorDetails'] = true;
+//$config['displayErrorDetails'] = true;
 //$config['addContentLengthHeader'] = false;
 
 $config['db']['host']   = "localhost";
@@ -22,22 +25,23 @@ $app->get('/hello/{name}', function ($request, $response, $args) {
     return $response->write("Hello " . $args['name']);
 });
 // Optional arguements
-$app->get('/testIt[/{name}]',function($request, $response, $args) {
-  //$app->render( 'beta_register.php', array('page_title' => "Beta Register",'data'=>'' ) );
-  /*
-  $response = $app->response();
-  //$response['Content-Type'] = 'application/json';
-  $response->headers->set('Content-Type', 'application/json');
-  $response->status(200);
-  $dataObj='{"API": "1.0.0","by":"saumya"}';
-  $response->body($dataObj);
-  */
-
+$app->get('/testJSON[/{name}]',function($request, $response, $args) {
+  //1. make the data
+  $dataObj='{"API": "1.0.0","by":"'.$args['name'].'"}';
+  //$dataObj='{ "API" : "1.0.0" , "by" : "saumya" }';
+  //2. make the new object
+  $newResponse = $response->withHeader('Content-type', 'application/json');
+  $newResponse = $response->withStatus(200);
+  $body = $response->getBody();
+  //$body->write(json_encode($dataObj));
+  $body->write($dataObj);
+  //3. return the new response
+  return $newResponse;
   
   //redirect
   //return $response->withStatus(302)->withHeader('Location', 'http://google.com');
   //
-  echo "Hello World! <br /> Really! ".$args['name'].'?';
+  //echo "Hello World! <br /> Really! ".$args['name'].'?';
 });
 
 $app->group('/status', function(){
