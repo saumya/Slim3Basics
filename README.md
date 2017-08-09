@@ -12,6 +12,8 @@ An Application using [Slim 3][1] framework using [Composer][3]. Here is the [off
 ```
 Start using the framework.
 
+My [learning of Slim started with Slim 1][4] and never really done anything on Slim 2.
+
 
 
 
@@ -19,3 +21,4 @@ Start using the framework.
  [1]: https://www.slimframework.com/
  [2]: https://www.slimframework.com/docs/start/installation.html
  [3]: https://getcomposer.org
+ [4]: https://github.com/saumya/slimCraft
