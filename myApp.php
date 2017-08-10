@@ -84,12 +84,18 @@ $app->group('/status', function(){
     $pdo = null;
 
     //var_dump($allCategories);
+    //$dataObj='{"API": "1.0.0","by":"'.$args['name'].'"}';
+    /*
     echo "All Categories <br/>";
     foreach ($allCategories as $category) {
       echo 'category_id='.$category['category_id'].': parent_id='.$category['parent_id'] . '<br />';
     }
+    */
+    //var_dump(json_encode($allCategories));
+
     //return $response->write('API is getting ready.');
-    return $pdo;
+    //return $pdo;
+    return(json_encode($allCategories));
   });
 });
 
