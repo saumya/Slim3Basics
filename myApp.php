@@ -1,5 +1,9 @@
 <?php 
 
+//
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
+//
 require 'vendor/autoload.php';
 
 // Create and configure Slim app
@@ -21,7 +25,7 @@ $config['db']['dbname'] = "slim_1_one";
 $app = new \Slim\App($config);
 
 // Define app routes
-$app->get('/hello/{name}', function ($request, $response, $args) {
+$app->get('/hello/{name}', function (Request $request,Response $response, $args) {
     return $response->write("Hello " . $args['name']);
 });
 // Optional arguements
