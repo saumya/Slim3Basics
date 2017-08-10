@@ -11,14 +11,17 @@ $config = ['settings' => [  'addContentLengthHeader' => false,
                             'displayErrorDetails'=> true,
                           ]
           ];
-
-//$config['displayErrorDetails'] = true;
-//$config['addContentLengthHeader'] = false;
-
+/*
 $config['db']['host']   = "localhost";
 $config['db']['user']   = "root";
 $config['db']['pass']   = "root";
 $config['db']['dbname'] = "slim_1_one";
+*/
+// Opencart DB
+$config['db']['host']   = "localhost";
+$config['db']['user']   = "opencart";
+$config['db']['pass']   = "opencart123";
+$config['db']['dbname'] = "opencart_3.0.2.0";
 
 
 //
@@ -57,6 +60,36 @@ $app->group('/status', function(){
   });
   $this->get('/api',function($request, $response, $args){
     return $response->write('API is getting ready.');
+  });
+  $this->get('/db',function($request, $response, $args){
+    //$settings = $this->get('settings')['displayErrorDetails'];
+    //$db = $this->get('db');
+    $db = $this->db;
+    $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
+    // not necessary but useful
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    // log
+    //var_dump($pdo);
+
+    // use the connection here
+    //$sth = $pdo->query('SELECT * FROM oc_category');
+    $sth = $pdo->prepare("SELECT * FROM oc_category");
+    $sth->execute();
+    //var_dump($sth);
+    $allCategories = $sth->fetchAll();
+    //var_dump($allCategories);
+    // and now we're done; close it
+    $sth = null;
+    $pdo = null;
+
+    //var_dump($allCategories);
+    echo "All Categories <br/>";
+    foreach ($allCategories as $category) {
+      echo 'category_id='.$category['category_id'].': parent_id='.$category['parent_id'] . '<br />';
+    }
+    //return $response->write('API is getting ready.');
+    return $pdo;
   });
 });
 
