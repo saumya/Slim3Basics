@@ -95,7 +95,15 @@ $app->group('/status', function(){
 
     //return $response->write('API is getting ready.');
     //return $pdo;
-    return(json_encode($allCategories));
+    //return(json_encode($allCategories));
+
+    // rturning a JSON response
+    $dataObj = json_encode($allCategories);
+    $newResponse = $response->withHeader('Content-type', 'application/json');
+    $newResponse = $response->withStatus(200);
+    $body = $response->getBody();
+    $body->write($dataObj);
+    return $newResponse;
   });
 });
 
