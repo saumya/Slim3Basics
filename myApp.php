@@ -176,8 +176,29 @@ $app->group('/v1.0.0', function(){
     $newResponse = $response->withJson($allCountries);
     return $newResponse;
   });
+
+
   //$this->get('/add/customer/{fname}/{lname}','addNewCustomer');
-  $this->post('/add/customer','addNewCustomer');
+  //$this->post('/add/customer','addNewCustomer');
+  $this->post('/add/customer',function($request, $response, $args){
+    $db = $this->db;
+    $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+    $userData = ($request->getParsedBody());
+
+    $sql = "INSERT INTO oc_customer (firstname,lastname) VALUES (:userFirstName,:userLastName)";
+    $sth = $pdo->prepare($sql);
+    $sth->bindParam("userFirstName", $userData['fname']);
+    $sth->bindParam("userLastName", $userData['lname']);
+    $sth->execute();
+    
+    $input['id'] = $pdo->lastInsertId();
+    return $response->withJson($input);
+
+    //return var_dump($userData);
+  });
   //
 });
 
@@ -189,23 +210,39 @@ $app->run();
 
 function addNewCustomer ($request, $response, $arguements){
   //$db = $this->db;
-  $db = $app->db;
-  //$pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
+  $dbSettings = $app->db;
+  $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
   // not necessary but useful
   //$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   //$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
   //===========
 
-  $userData = $request->getParsedBody();
+  $userData = ($request->getParsedBody());
+  //$fname = $userData['fname'];
+  //$lname = $userData['lname'];
 
-  $fname = $userData['fname'];
-  $lname = $userData['lname'];
+  //return $userData['fname'];
+  /*
+  $sql = "INSERT INTO oc_customer (firstname) VALUES (:userFirstName)";
+  $sth = $app->db->prepare($sql);
+  $sth->bindParam("userFirstName", $userData['fname']);
+  $sth->execute();
+  */
+  //$input['id'] = $this->db->lastInsertId();
+  //return $response->withJson($userData);
+  return true;
 
-  return $fname.' '.$lname;
 
   //var_dump($arguements);
   /*
   $userData = json_decode($request->getBody());
+  
+  //
+  $db = connect_db();
+  //
+  $request = $app->request;
+  $userData = json_decode($request->getBody());
+
   // DB
   try{ 
       $sql = "INSERT INTO oc_customer (name, phone, email, address, pincode) VALUES (?, ?, ?, ?, ?)";
