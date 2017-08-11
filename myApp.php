@@ -51,6 +51,16 @@ $app->get('/testJSON[/{name}]',function($request, $response, $args) {
   //echo "Hello World! <br /> Really! ".$args['name'].'?';
 });
 
+$app->get('/',function($request,$response,$args){
+  echo '<a href="myApp.php/hello">Hello Test: Mandatory Params</a> <br />';
+  echo '<a href="myApp.php/testJSON">Just Test: Optional Params</a> <br />';
+  echo "<br/>";
+  echo '<a href="myApp.php/status/version">Version</a> <br />';
+  echo '<a href="myApp.php/status/app">App Status</a> <br />';
+  echo '<a href="myApp.php/status/api">API Status</a> <br />';
+  echo '<a href="myApp.php/status/db">DB Status</a> <br />';
+});
+
 $app->group('/status', function(){
   $this->get('/version',function($request, $response, $args){
     return $response->write('0.0.1');
