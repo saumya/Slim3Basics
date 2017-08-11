@@ -28,10 +28,28 @@ $config['db']['dbname'] = "opencart_3.0.2.0";
 $app = new \Slim\App($config);
 
 // Define app routes
+$app->get('/',function($request,$response,$args){
+  echo '<div> Slim version - '.\Slim\App::VERSION.'<div /> <br />';
+  echo "<div style='font-size:2em;'> Sample API </div> <br />";
+  echo '<a href="myApp.php/hello">Hello Test: Mandatory Params</a> <br />';
+  echo '<a href="myApp.php/testJSON">Just Test: Optional Params</a> <br />';
+  echo "<br/>";
+  echo "<div style='font-size:2em;'> Status API </div> <br />";
+  echo '<a href="myApp.php/status/version">Version</a> <br />';
+  echo '<a href="myApp.php/status/app">App Status</a> <br />';
+  echo '<a href="myApp.php/status/api">API Status</a> <br />';
+  echo '<a href="myApp.php/status/db">DB Status</a> <br />';
+  echo "<br/>";
+  echo "<div style='font-size:4em;'> Product API </div> <br />";
+  echo '<a href="myApp.php/v1.0.0/countries">All Countries</a> <br />';
+  echo '<a href="myApp.php/v1.0.0/customer">All Customers</a> <br />';
+});
+
+// Mandatory Arguements
 $app->get('/hello/{name}', function (Request $request,Response $response, $args) {
     return $response->write("Hello " . $args['name']);
 });
-// Optional arguements
+// Optional Arguements
 $app->get('/testJSON[/{name}]',function($request, $response, $args) {
   //1. make the data
   $dataObj='{"API": "1.0.0","by":"'.$args['name'].'"}';
@@ -51,20 +69,7 @@ $app->get('/testJSON[/{name}]',function($request, $response, $args) {
   //echo "Hello World! <br /> Really! ".$args['name'].'?';
 });
 
-$app->get('/',function($request,$response,$args){
-  echo '<a href="myApp.php/hello">Hello Test: Mandatory Params</a> <br />';
-  echo '<a href="myApp.php/testJSON">Just Test: Optional Params</a> <br />';
-  echo "<br/>";
-  echo '<a href="myApp.php/status/version">Version</a> <br />';
-  echo '<a href="myApp.php/status/app">App Status</a> <br />';
-  echo '<a href="myApp.php/status/api">API Status</a> <br />';
-  echo '<a href="myApp.php/status/db">DB Status</a> <br />';
-  echo "<br/>";
-  echo "<div style='font-size:4em;'> Product API </div> <br />";
-  echo '<a href="myApp.php/v1.0.0/countries">All Countries</a> <br />';
-  echo '<a href="myApp.php/v1.0.0/customer">All Customers</a> <br />';
-});
-
+// Status
 $app->group('/status', function(){
   $this->get('/version',function($request, $response, $args){
     return $response->write('0.0.1');
@@ -121,6 +126,7 @@ $app->group('/status', function(){
   });
 });
 
+// Product
 $app->group('/v1.0.0', function(){
   $this->get('/countries',function($request, $response, $args){
     $db = $this->db;
@@ -134,11 +140,15 @@ $app->group('/v1.0.0', function(){
     $sth = null;
     $pdo = null;
     // rturning a JSON response
-    $dataObj = json_encode($allCountries);
+    //$dataObj = json_encode($allCountries);
     $newResponse = $response->withHeader('Content-type', 'application/json');
     $newResponse = $response->withStatus(200);
-    $body = $response->getBody();
-    $body->write($dataObj);
+    //$body = $response->getBody();
+    //$body->write($dataObj);
+    //return $newResponse;
+
+    // Slim has a method for JSON response withJson()
+    $newResponse = $response->withJson($allCountries);
     return $newResponse;
   });
   $this->get('/customer',function($request, $response, $args){
@@ -152,12 +162,15 @@ $app->group('/v1.0.0', function(){
     $allCountries = $sth->fetchAll();
     $sth = null;
     $pdo = null;
-    // rturning a JSON response
-    $dataObj = json_encode($allCountries);
+    // returning a JSON response
+    //$dataObj = json_encode($allCountries);
     $newResponse = $response->withHeader('Content-type', 'application/json');
     $newResponse = $response->withStatus(200);
-    $body = $response->getBody();
-    $body->write($dataObj);
+    //$body = $response->getBody();
+    //$body->write($dataObj);
+
+    // Slim has a method for JSON response withJson()
+    $newResponse = $response->withJson($allCountries);
     return $newResponse;
   });
 });
