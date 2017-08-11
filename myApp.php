@@ -11,25 +11,27 @@ $config = ['settings' => [  'addContentLengthHeader' => false,
                             'displayErrorDetails'=> true,
                           ]
           ];
-/*
+
+// SlimApp DB
 $config['db']['host']   = "localhost";
 $config['db']['user']   = "root";
 $config['db']['pass']   = "root";
 $config['db']['dbname'] = "slim_1_one";
-*/
+
 // Opencart DB
+/*
 $config['db']['host']   = "localhost";
 $config['db']['user']   = "opencart";
 $config['db']['pass']   = "opencart123";
 $config['db']['dbname'] = "opencart_3.0.2.0";
-
+*/
 
 //
 $app = new \Slim\App($config);
 
 // Define app routes
 $app->get('/',function($request,$response,$args){
-  echo '<div> Slim version - '.\Slim\App::VERSION.'<div /> <br />';
+  echo '<div style="font-size:1.0em;text-align:center;background-color:yellow;max-width:200px;min-height:2em;max-height:2em;margin:auto;padding-top:1em;"> Slim version - '.\Slim\App::VERSION.'</div> <br />';
   echo "<div style='font-size:2em;'> Sample API </div> <br />";
   echo '<a href="myApp.php/hello">Hello Test: Mandatory Params</a> <br />';
   echo '<a href="myApp.php/testJSON">Just Test: Optional Params</a> <br />';
@@ -42,7 +44,8 @@ $app->get('/',function($request,$response,$args){
   echo "<br/>";
   echo "<div style='font-size:4em;'> Product API </div> <br />";
   echo '<a href="myApp.php/v1.0.0/countries">All Countries</a> <br />';
-  echo '<a href="myApp.php/v1.0.0/customer">All Customers</a> <br />';
+  echo '<a href="myApp.php/v1.0.0/customers">All Customers</a> <br />';
+  echo '<a href="myApp.php/v1.0.0/add/customer">Add Customer</a> <br />';
 });
 
 // Mandatory Arguements
@@ -151,7 +154,7 @@ $app->group('/v1.0.0', function(){
     $newResponse = $response->withJson($allCountries);
     return $newResponse;
   });
-  $this->get('/customer',function($request, $response, $args){
+  $this->get('/customers',function($request, $response, $args){
     $db = $this->db;
     $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
     // not necessary but useful
@@ -173,11 +176,72 @@ $app->group('/v1.0.0', function(){
     $newResponse = $response->withJson($allCountries);
     return $newResponse;
   });
+  //$this->get('/add/customer/{fname}/{lname}','addNewCustomer');
+  $this->post('/add/customer','addNewCustomer');
+  //
 });
 
 
 // Run app
 $app->run();
 
+//
+
+function addNewCustomer ($request, $response, $arguements){
+  //$db = $this->db;
+  $db = $app->db;
+  //$pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
+  // not necessary but useful
+  //$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  //$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+  //===========
+
+  $userData = $request->getParsedBody();
+
+  $fname = $userData['fname'];
+  $lname = $userData['lname'];
+
+  return $fname.' '.$lname;
+
+  //var_dump($arguements);
+  /*
+  $userData = json_decode($request->getBody());
+  // DB
+  try{ 
+      $sql = "INSERT INTO oc_customer (name, phone, email, address, pincode) VALUES (?, ?, ?, ?, ?)";
+      if($stmt = $pdo->prepare($sql)){
+          $stmt->bind_param("sissi",$name,$phone,$email,$address,$pin);
+          //
+          $name = $userData->uName;
+          $phone = $userData->phone;
+          $email = $userData->email;
+          $address = $userData->address;
+          $pin = $userData->pin;
+          //
+          //echo json_encode($stmt);
+          $stmt->execute();
+          //
+          $msg = 'SUCCESS';
+          echo json_encode('{"result":"SUCCESS","message":"'.$msg.'"}');
+          //echo ("{'result':'SUCCESS','message':'$msg'}");
+          //
+          $stmt->close();
+          $db->close();
+      }else{
+          $msg = 'FAIL : $db->prepare($sql) : '.json_encode($stmt);
+          //echo 'FAIL : $db->prepare($sql) : '.json_encode($stmt);
+          echo json_encode("{'result':'FAIL','message':'$msg'}");
+      }
+  }catch(Exception $e){
+      $msg = 'FAIL : $db->prepare($sql) : '.json_encode(var_dump($e));
+      //echo '{"error":{"text":'. $e->getMessage() .'}}';
+      echo json_encode("{'result':'FAIL','message':'$msg'}");
+  }
+  */
+  //===========
+  //return echo "Hello";
+  //echo "string";
+  //return $response->write("App is ready to work on API.");
+}
 
 ?>
