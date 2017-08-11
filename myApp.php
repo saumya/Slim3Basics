@@ -59,6 +59,10 @@ $app->get('/',function($request,$response,$args){
   echo '<a href="myApp.php/status/app">App Status</a> <br />';
   echo '<a href="myApp.php/status/api">API Status</a> <br />';
   echo '<a href="myApp.php/status/db">DB Status</a> <br />';
+  echo "<br/>";
+  echo "<div style='font-size:4em;'> Product API </div> <br />";
+  echo '<a href="myApp.php/v1.0.0/countries">All Countries</a> <br />';
+  echo '<a href="myApp.php/v1.0.0/customer">All Customers</a> <br />';
 });
 
 $app->group('/status', function(){
@@ -109,6 +113,47 @@ $app->group('/status', function(){
 
     // rturning a JSON response
     $dataObj = json_encode($allCategories);
+    $newResponse = $response->withHeader('Content-type', 'application/json');
+    $newResponse = $response->withStatus(200);
+    $body = $response->getBody();
+    $body->write($dataObj);
+    return $newResponse;
+  });
+});
+
+$app->group('/v1.0.0', function(){
+  $this->get('/countries',function($request, $response, $args){
+    $db = $this->db;
+    $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
+    // not necessary but useful
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    $sth = $pdo->prepare("SELECT * FROM oc_country");
+    $sth->execute();
+    $allCountries = $sth->fetchAll();
+    $sth = null;
+    $pdo = null;
+    // rturning a JSON response
+    $dataObj = json_encode($allCountries);
+    $newResponse = $response->withHeader('Content-type', 'application/json');
+    $newResponse = $response->withStatus(200);
+    $body = $response->getBody();
+    $body->write($dataObj);
+    return $newResponse;
+  });
+  $this->get('/customer',function($request, $response, $args){
+    $db = $this->db;
+    $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
+    // not necessary but useful
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    $sth = $pdo->prepare("SELECT * FROM oc_customer");
+    $sth->execute();
+    $allCountries = $sth->fetchAll();
+    $sth = null;
+    $pdo = null;
+    // rturning a JSON response
+    $dataObj = json_encode($allCountries);
     $newResponse = $response->withHeader('Content-type', 'application/json');
     $newResponse = $response->withStatus(200);
     $body = $response->getBody();
