@@ -199,6 +199,26 @@ $app->group('/v1.0.0', function(){
 
     //return var_dump($userData);
   });
+
+  $this->post('/add/company',function($request, $response, $args){
+    $db = $this->db;
+    $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+    $userData = ($request->getParsedBody());
+
+    $sql = "INSERT INTO app_product_company (name,note) VALUES (:companyName,:companyNote)";
+    $sth = $pdo->prepare($sql);
+    $sth->bindParam("companyName", $userData['cname']);
+    $sth->bindParam("companyNote", $userData['cnote']);
+    $sth->execute();
+    
+    $input['id'] = $pdo->lastInsertId();
+    return $response->withJson($input);
+
+    //return var_dump($userData);
+  });
   //
 });
 
