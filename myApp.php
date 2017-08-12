@@ -177,6 +177,7 @@ $app->group('/v1.0.0', function(){
     return $newResponse;
   });
 
+  // CREATE / Add
 
   //$this->get('/add/customer/{fname}/{lname}','addNewCustomer');
   //$this->post('/add/customer','addNewCustomer');
@@ -188,10 +189,12 @@ $app->group('/v1.0.0', function(){
 
     $userData = ($request->getParsedBody());
 
-    $sql = "INSERT INTO oc_customer (firstname,lastname) VALUES (:userFirstName,:userLastName)";
+    //$sql = "INSERT INTO oc_customer (firstname,lastname) VALUES (:userFirstName,:userLastName)";
+    $sql = "INSERT INTO app_customer (name,phone,address) VALUES (:uName,:uPhone,:uAddress)";
     $sth = $pdo->prepare($sql);
-    $sth->bindParam("userFirstName", $userData['fname']);
-    $sth->bindParam("userLastName", $userData['lname']);
+    $sth->bindParam("uName", $userData['customerName']);
+    $sth->bindParam("uPhone", $userData['customerPhone']);
+    $sth->bindParam("uAddress", $userData['customerAddress']);
     $sth->execute();
     
     $input['id'] = $pdo->lastInsertId();
@@ -219,6 +222,29 @@ $app->group('/v1.0.0', function(){
 
     //return var_dump($userData);
   });
+
+  $this->post('/add/product',function($request, $response, $args){
+    $db = $this->db;
+    $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+    $userData = ($request->getParsedBody());
+
+    $sql = "INSERT INTO app_product (name,id_company,price) VALUES (:productName,:companyId,:productPrice)";
+    $sth = $pdo->prepare($sql);
+    $sth->bindParam("productName", $userData['product_name']);
+    $sth->bindParam("companyId", $userData['company_id']);
+    $sth->bindParam("productPrice", $userData['product_price']);
+    $sth->execute();
+    
+    $input['id'] = $pdo->lastInsertId();
+    return $response->withJson($input);
+
+    //return var_dump($userData);
+  });
+
+  //END - CREATE / Add
   //
 });
 
@@ -226,79 +252,5 @@ $app->group('/v1.0.0', function(){
 // Run app
 $app->run();
 
-//
-
-function addNewCustomer ($request, $response, $arguements){
-  //$db = $this->db;
-  $dbSettings = $app->db;
-  $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
-  // not necessary but useful
-  //$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  //$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-  //===========
-
-  $userData = ($request->getParsedBody());
-  //$fname = $userData['fname'];
-  //$lname = $userData['lname'];
-
-  //return $userData['fname'];
-  /*
-  $sql = "INSERT INTO oc_customer (firstname) VALUES (:userFirstName)";
-  $sth = $app->db->prepare($sql);
-  $sth->bindParam("userFirstName", $userData['fname']);
-  $sth->execute();
-  */
-  //$input['id'] = $this->db->lastInsertId();
-  //return $response->withJson($userData);
-  return true;
-
-
-  //var_dump($arguements);
-  /*
-  $userData = json_decode($request->getBody());
-  
-  //
-  $db = connect_db();
-  //
-  $request = $app->request;
-  $userData = json_decode($request->getBody());
-
-  // DB
-  try{ 
-      $sql = "INSERT INTO oc_customer (name, phone, email, address, pincode) VALUES (?, ?, ?, ?, ?)";
-      if($stmt = $pdo->prepare($sql)){
-          $stmt->bind_param("sissi",$name,$phone,$email,$address,$pin);
-          //
-          $name = $userData->uName;
-          $phone = $userData->phone;
-          $email = $userData->email;
-          $address = $userData->address;
-          $pin = $userData->pin;
-          //
-          //echo json_encode($stmt);
-          $stmt->execute();
-          //
-          $msg = 'SUCCESS';
-          echo json_encode('{"result":"SUCCESS","message":"'.$msg.'"}');
-          //echo ("{'result':'SUCCESS','message':'$msg'}");
-          //
-          $stmt->close();
-          $db->close();
-      }else{
-          $msg = 'FAIL : $db->prepare($sql) : '.json_encode($stmt);
-          //echo 'FAIL : $db->prepare($sql) : '.json_encode($stmt);
-          echo json_encode("{'result':'FAIL','message':'$msg'}");
-      }
-  }catch(Exception $e){
-      $msg = 'FAIL : $db->prepare($sql) : '.json_encode(var_dump($e));
-      //echo '{"error":{"text":'. $e->getMessage() .'}}';
-      echo json_encode("{'result':'FAIL','message':'$msg'}");
-  }
-  */
-  //===========
-  //return echo "Hello";
-  //echo "string";
-  //return $response->write("App is ready to work on API.");
-}
 
 ?>
