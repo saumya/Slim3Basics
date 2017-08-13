@@ -245,6 +245,39 @@ $app->group('/v1.0.0', function(){
   });
 
   //END - CREATE / Add
+  // READ / View
+  $this->get('/read/customer',function($request, $response, $args){
+      $db = $this->db;
+      $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
+      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+      $userData = ($request->getParsedBody());
+
+      //$sql = "INSERT INTO oc_customer (firstname,lastname) VALUES (:userFirstName,:userLastName)";
+      //$sql = "INSERT INTO app_customer (name,phone,address) VALUES (:uName,:uPhone,:uAddress)";
+      $sql = "SELECT * FROM app_customer";
+      $sth = $pdo->prepare($sql);
+      //$sth->bindParam("uName", $userData['customerName']);
+      //$sth->bindParam("uPhone", $userData['customerPhone']);
+      //$sth->bindParam("uAddress", $userData['customerAddress']);
+      $sth->execute();
+
+      $allCustomers = $sth->fetchAll();
+      $sth = null;
+      $pdo = null;
+      
+      //$input['id'] = $pdo->lastInsertId();
+      //return $response->withJson($input);
+      
+      $newResponse = $response->withHeader('Content-type', 'application/json');
+      $newResponse = $response->withStatus(200);
+      $newResponse = $response->withJson($allCustomers);
+
+      //return var_dump($userData);
+      return $newResponse;
+  });
+  //END - READ / View
   //
 });
 
