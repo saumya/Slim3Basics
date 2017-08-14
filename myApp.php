@@ -354,8 +354,6 @@ $app->group('/v1.0.0', function(){
 
     $userData = ($request->getParsedBody());
 
-    //$sql = "INSERT INTO app_product_company (name,note) VALUES (:companyName,:companyNote)";
-
     $sql = "UPDATE `app_product_company` 
             SET `name`= :dCompanyName, 
                 `note`= :dCompanyNote 
@@ -371,7 +369,33 @@ $app->group('/v1.0.0', function(){
     
     return $sth->rowCount().' records UPDATED successfully.';
   });
-  $this->post('/update/product',function($request, $response, $args){});
+  $this->post('/update/product',function($request, $response, $args){
+    $db = $this->db;
+    $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+    $userData = ($request->getParsedBody());
+
+    //$sql = "INSERT INTO app_product (name,id_company,price) VALUES (:productName,:companyId,:productPrice)";
+
+    $sql = "UPDATE `app_product` 
+            SET `name`= :dProductName, 
+                `id_company`= :didCompany,
+                `price`= :dProductPrice 
+            WHERE `id`= :did";
+
+    $sth = $pdo->prepare($sql);
+    
+    $sth->bindParam("dProductName", $userData['productName']);
+    $sth->bindParam("didCompany", $userData['idCompany']);
+    $sth->bindParam("dProductPrice", $userData['productPrice']);
+    $sth->bindParam("did", $userData['id']);
+    
+    $sth->execute();
+    
+    return $sth->rowCount().' records UPDATED successfully.';    
+  });
   //END UPDATE / Edit
   //
 });
