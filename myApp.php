@@ -316,6 +316,38 @@ $app->group('/v1.0.0', function(){
       return $newResponse;
   });
   //END - READ / View
+  // UPDATE / Edit
+  $this->post('/update/customer',function($request, $response, $args){
+    $db = $this->db;
+    $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+    $userData = ($request->getParsedBody());
+
+    //$sql = "INSERT INTO app_customer (name,phone,address) VALUES (:uName,:uPhone,:uAddress)";
+    //$sql = "UPDATE app_customer SET name='Doe' phone='1010101010' address='Address is here.' WHERE id=1";
+    $sql = "UPDATE `app_customer` 
+            SET `name`= :uName, 
+                `phone`= :uPhone, 
+                `address`= :uAddress 
+            WHERE `id`=id";
+
+    $sth = $pdo->prepare($sql);
+    
+    $sth->bindParam("uName", $userData['customerName']);
+    $sth->bindParam("uPhone", $userData['customerPhone']);
+    $sth->bindParam("uAddress", $userData['customerAddress']);
+    
+    $sth->execute();
+    
+    //$input['id'] = $pdo->lastInsertId();
+    //return $response->withJson($input);
+    return $sth->rowCount().' records UPDATED successfully.';
+  });
+  $this->post('/update/company',function($request, $response, $args){});
+  $this->post('/update/product',function($request, $response, $args){});
+  //END UPDATE / Edit
   //
 });
 
