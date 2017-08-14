@@ -176,9 +176,9 @@ $app->group('/v1.0.0', function(){
     $newResponse = $response->withJson($allCountries);
     return $newResponse;
   });
-
+  // =============================================================================
   // CREATE / Add
-
+  // =============================================================================
   //$this->get('/add/customer/{fname}/{lname}','addNewCustomer');
   //$this->post('/add/customer','addNewCustomer');
   $this->post('/add/customer',function($request, $response, $args){
@@ -245,7 +245,9 @@ $app->group('/v1.0.0', function(){
   });
 
   //END - CREATE / Add
+  // =============================================================================
   // READ / View
+  // =============================================================================
   $this->get('/read/customer',function($request, $response, $args){
       $db = $this->db;
       $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
@@ -316,7 +318,9 @@ $app->group('/v1.0.0', function(){
       return $newResponse;
   });
   //END - READ / View
+  // =============================================================================
   // UPDATE / Edit
+  // =============================================================================
   $this->post('/update/customer',function($request, $response, $args){
     $db = $this->db;
     $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
@@ -325,8 +329,6 @@ $app->group('/v1.0.0', function(){
 
     $userData = ($request->getParsedBody());
 
-    //$sql = "INSERT INTO app_customer (name,phone,address) VALUES (:uName,:uPhone,:uAddress)";
-    //$sql = "UPDATE app_customer SET name='Doe' phone='1010101010' address='Address is here.' WHERE id=1";
     $sql = "UPDATE `app_customer` 
             SET `name`= :uName, 
                 `phone`= :uPhone, 
@@ -377,8 +379,6 @@ $app->group('/v1.0.0', function(){
 
     $userData = ($request->getParsedBody());
 
-    //$sql = "INSERT INTO app_product (name,id_company,price) VALUES (:productName,:companyId,:productPrice)";
-
     $sql = "UPDATE `app_product` 
             SET `name`= :dProductName, 
                 `id_company`= :didCompany,
@@ -397,6 +397,58 @@ $app->group('/v1.0.0', function(){
     return $sth->rowCount().' records UPDATED successfully.';    
   });
   //END UPDATE / Edit
+  // =============================================================================
+  // DELETE / Edit
+  // =============================================================================
+  $this->post('/delete/customer',function($request, $response, $args){
+    $db = $this->db;
+    $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+    $userData = ($request->getParsedBody());
+
+    $sql = "DELETE FROM `app_customer` WHERE `id` = :did";
+    
+    $sth = $pdo->prepare($sql);
+    $sth->bindParam("did", $userData['id']);
+    $sth->execute();
+    
+    return $sth->rowCount().' records DELETED successfully.'; 
+  });
+  $this->post('/delete/company',function($request, $response, $args){
+    $db = $this->db;
+    $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+    $userData = ($request->getParsedBody());
+
+    $sql = "DELETE FROM `app_product_company` WHERE `id` = :did";
+    
+    $sth = $pdo->prepare($sql);
+    $sth->bindParam("did", $userData['id']);
+    $sth->execute();
+    
+    return $sth->rowCount().' records DELETED successfully.';
+  });
+  $this->post('/delete/product',function($request, $response, $args){
+    $db = $this->db;
+    $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+    $userData = ($request->getParsedBody());
+
+    $sql = "DELETE FROM `app_product` WHERE `id` = :did";
+    
+    $sth = $pdo->prepare($sql);
+    $sth->bindParam("did", $userData['id']);
+    $sth->execute();
+    
+    return $sth->rowCount().' records DELETED successfully.';    
+  });
+  //END DELETE / Edit
   //
 });
 
