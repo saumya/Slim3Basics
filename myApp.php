@@ -8,6 +8,8 @@ require 'vendor/autoload.php';
 //
 require_once __DIR__.'/myApp/App/MyClassA.php';
 //require_once '/myApp/App/MyClassA.php';
+//use '/myApp/App/MyClassA.php';
+require_once __DIR__.'/myApp/App/DButil.php';
 
 // Create and configure Slim app
 $config = ['settings' => [  'addContentLengthHeader' => false,
@@ -32,10 +34,21 @@ $config['db']['dbname'] = "opencart_3.0.2.0";
 //
 $app = new \Slim\App($config);
 
+
 // Define app routes
 $app->get('/',function($request,$response,$args){
-
+  
+  /*
   $a = new MyClassA('saumya');
+  $conn = $a->getConnection($this->db);
+  var_dump($conn);
+  */
+
+  //$dbUtil = new myApp\App\DButil('saumya');
+  /*
+  $dbUtil = new DButil('saumya');
+  $dbUtil->getConnection($this->db);
+  */
 
   //var_dump(__DIR__.'/myApp/App/MyClassA.php');
 
@@ -53,7 +66,6 @@ $app->get('/',function($request,$response,$args){
   echo "<div style='font-size:4em;'> Product API </div> <br />";
   echo '<a href="myApp.php/v1.0.0/countries">All Countries</a> <br />';
   echo '<a href="myApp.php/v1.0.0/customers">All Customers</a> <br />';
-  echo '<a href="myApp.php/v1.0.0/add/customer">Add Customer</a> <br />';
 });
 
 // Mandatory Arguements
@@ -140,11 +152,17 @@ $app->group('/status', function(){
 // Product
 $app->group('/v1.0.0', function(){
   $this->get('/countries',function($request, $response, $args){
+    /*
     $db = $this->db;
     $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
     // not necessary but useful
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    */
+    
+    $dbUtil = new DButil('saumya');
+    $pdo = $dbUtil->getConnection($this->db);
+    
     $sth = $pdo->prepare("SELECT * FROM oc_country");
     $sth->execute();
     $allCountries = $sth->fetchAll();
@@ -163,11 +181,17 @@ $app->group('/v1.0.0', function(){
     return $newResponse;
   });
   $this->get('/customers',function($request, $response, $args){
+    /*
     $db = $this->db;
     $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
     // not necessary but useful
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    */
+    
+    $dbUtil = new DButil('saumya');
+    $pdo = $dbUtil->getConnection($this->db);
+
     $sth = $pdo->prepare("SELECT * FROM oc_customer");
     $sth->execute();
     $allCountries = $sth->fetchAll();

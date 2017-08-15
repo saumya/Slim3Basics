@@ -1,25 +1,22 @@
 <?php
 
-//namespace myApp\App;
 /**
-* A sample Class
+* This is for the Current application
 */
 
+//namespace myApp\App;
 
-//class MyClassA extends AnotherClass
-class MyClassA
+/**
+* Database Utility Class
+*/
+
+class DButil
 {
-	
-	public $var = 'a default value';
 	
 	function __construct($argument)
 	{
-		echo 'MyClassA constructor '."$argument !";
+		echo 'DButil constructor '."$argument !";
 	}
-	
-	public function displayVar() {
-        echo $this->var;
-    }
 
     public function getConnection($db):PDO{
     	//$db = $this->db;
