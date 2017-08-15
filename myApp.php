@@ -5,6 +5,9 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 //
 require 'vendor/autoload.php';
+//
+require_once __DIR__.'/myApp/App/MyClassA.php';
+//require_once '/myApp/App/MyClassA.php';
 
 // Create and configure Slim app
 $config = ['settings' => [  'addContentLengthHeader' => false,
@@ -31,6 +34,11 @@ $app = new \Slim\App($config);
 
 // Define app routes
 $app->get('/',function($request,$response,$args){
+
+  $a = new MyClassA('saumya');
+
+  //var_dump(__DIR__.'/myApp/App/MyClassA.php');
+
   echo '<div style="font-size:1.0em;text-align:center;background-color:yellow;max-width:200px;min-height:2em;max-height:2em;margin:auto;padding-top:1em;"> Slim version - '.\Slim\App::VERSION.'</div> <br />';
   echo "<div style='font-size:2em;'> Sample API </div> <br />";
   echo '<a href="myApp.php/hello">Hello Test: Mandatory Params</a> <br />';
