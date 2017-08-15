@@ -6,7 +6,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 //
 require 'vendor/autoload.php';
 //
-require_once __DIR__.'/myApp/App/MyClassA.php';
+//require_once __DIR__.'/myApp/App/MyClassA.php';
 //require_once '/myApp/App/MyClassA.php';
 //use '/myApp/App/MyClassA.php';
 require_once __DIR__.'/myApp/App/DButil.php';
@@ -105,6 +105,7 @@ $app->group('/status', function(){
   });
   $this->get('/db',function($request, $response, $args){
     //$settings = $this->get('settings')['displayErrorDetails'];
+    /*
     //$db = $this->get('db');
     $db = $this->db;
     $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'], $db['user'], $db['pass']);
@@ -113,6 +114,10 @@ $app->group('/status', function(){
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     // log
     //var_dump($pdo);
+    */
+
+    $dbUtil = new DButil('saumya');
+    $pdo = $dbUtil->getConnection($this->db);
 
     // use the connection here
     //$sth = $pdo->query('SELECT * FROM oc_category');
