@@ -253,6 +253,30 @@ $app->group('/v1.0.0', function(){
     //return var_dump($userData);
   });
 
+  $this->post('/add/product/bought',function($request, $response, $args){
+    //
+    $dbUtil = new DButil('saumya');
+    $pdo = $dbUtil->getConnection($this->db);
+    //
+    $userData = ($request->getParsedBody());
+    //
+    //$sql = "INSERT INTO app_product_bought (table_column_name) VALUES (:userValue)";
+    $sql = "INSERT INTO app_product_bought (product_id,quantity,b_date) VALUES (:boughtId,:boughtQuantity,:boughtDate)";
+    $sth = $pdo->prepare($sql);
+    //
+    $sth->bindParam("boughtId", $userData['bought_id']);
+    $sth->bindParam("boughtQuantity", $userData['bought_quantity']);
+    $sth->bindParam("boughtDate", $userData['bought_date']);
+    $sth->execute();
+    //
+    $input['id'] = $pdo->lastInsertId();
+    //
+    $sth = null; $pdo = null;
+    //
+    $newResponse = $response->withJson($input);
+    return $newResponse;
+  });
+
   //END - CREATE / Add
   // =============================================================================
   // READ / View
