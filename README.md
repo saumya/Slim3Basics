@@ -15,6 +15,52 @@ Start using the framework.
 My [learning of Slim started with Slim 1][4] and never really done anything on Slim 2.
 
 
+Available APIs
+
+```
+http://localhost:8888/slim/app_1/myApp.php/
+http://localhost:8888/slim/app_1/myApp.php/hello/{name}
+http://localhost:8888/slim/app_1/myApp.php/testJSON[/{name}]
+
+http://localhost:8888/slim/app_1/myApp.php/status
+http://localhost:8888/slim/app_1/myApp.php/status/version
+http://localhost:8888/slim/app_1/myApp.php/status/app
+http://localhost:8888/slim/app_1/myApp.php/status/api
+http://localhost:8888/slim/app_1/myApp.php/status/db
+
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/countries
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/customers
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/customers
+```
+
+The CRUD API
+
+```
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/customer
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/company
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/product
+
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/product_bought
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/product_sold
+
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/read/customer
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/read/company
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/read/product
+
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/update/customer
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/update/company
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/update/product
+
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/delete/customer
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/delete/company
+http://localhost:8888/slim/app_1/myApp.php/v1.0.0/delete/product
+
+```
+
+#### TODO
+
+ - prescription API
+
 
 
 

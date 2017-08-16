@@ -253,7 +253,7 @@ $app->group('/v1.0.0', function(){
     //return var_dump($userData);
   });
 
-  $this->post('/add/product/bought',function($request, $response, $args){
+  $this->post('/add/product_bought',function($request, $response, $args){
     //
     $dbUtil = new DButil('saumya');
     $pdo = $dbUtil->getConnection($this->db);
@@ -266,7 +266,30 @@ $app->group('/v1.0.0', function(){
     //
     $sth->bindParam("boughtId", $userData['bought_id']);
     $sth->bindParam("boughtQuantity", $userData['bought_quantity']);
-    $sth->bindParam("boughtDate", $userData['bought_date']);
+    $sth->bindParam("boughtDate", $userData['bought_date']); // bought_date format - 2017-12-13, YYYY-MM-DD
+    $sth->execute();
+    //
+    $input['id'] = $pdo->lastInsertId();
+    //
+    $sth = null; $pdo = null;
+    //
+    $newResponse = $response->withJson($input);
+    return $newResponse;
+  });
+  $this->post('/add/product_sold',function($request, $response, $args){
+    //
+    $dbUtil = new DButil('saumya');
+    $pdo = $dbUtil->getConnection($this->db);
+    //
+    $userData = ($request->getParsedBody());
+    //
+    //$sql = "INSERT INTO app_product_bought (table_column_name) VALUES (:userValue)";
+    $sql = "INSERT INTO app_product_sold (product_id,quantity,s_date) VALUES (:soldId,:soldQuantity,:soldDate)";
+    $sth = $pdo->prepare($sql);
+    //
+    $sth->bindParam("soldId", $userData['sold_id']);
+    $sth->bindParam("soldQuantity", $userData['sold_quantity']);
+    $sth->bindParam("soldDate", $userData['sold_date']); // sold_date format - 2017-12-13, YYYY-MM-DD
     $sth->execute();
     //
     $input['id'] = $pdo->lastInsertId();
@@ -482,6 +505,33 @@ $app->group('/v1.0.0', function(){
     return $sth->rowCount().' records DELETED successfully.';    
   });
   //END DELETE / Edit
+  // Prescription
+  $this->post('/add/prescription',function($request, $response, $args){
+    //
+    $dbUtil = new DButil('saumya');
+    $pdo = $dbUtil->getConnection($this->db);
+    //
+    $userData = ($request->getParsedBody());
+    //
+    //$sql = "INSERT INTO app_product_bought (table_column_name) VALUES (:userValue)";
+    $sql = "INSERT INTO app_visit (id_customer,p_date,symptom,prescription,note) VALUES (:customerId,:prescriptionDate,:symptom,:prescription,:note)";
+    $sth = $pdo->prepare($sql);
+    //
+    $sth->bindParam("customerId", $userData['customer_id']);
+    $sth->bindParam("prescriptionDate", $userData['prescription_date']); // prescription_date format - 2017-12-13, YYYY-MM-DD
+    $sth->bindParam("symptom", $userData['customer_symptom']);
+    $sth->bindParam("prescription", $userData['doctor_prescription']);
+    $sth->bindParam("note", $userData['customer_note']);
+    $sth->execute();
+    //
+    $input['id'] = $pdo->lastInsertId();
+    //
+    $sth = null; $pdo = null;
+    //
+    $newResponse = $response->withJson($input);
+    return $newResponse;
+  });
+  //END Prescription
   //
 });
 
