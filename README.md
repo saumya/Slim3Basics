@@ -36,30 +36,33 @@ http://localhost:8888/slim/app_1/myApp.php/v1.0.0/customers
 The CRUD API
 
 ```
-http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/customer
-http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/company
-http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/product
+[POST] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/customer
+[POST] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/company
+[POST] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/product
 
-http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/product_bought
-http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/product_sold
+[POST] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/product_bought
+[POST] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/product_sold
 
-http://localhost:8888/slim/app_1/myApp.php/v1.0.0/read/customer
-http://localhost:8888/slim/app_1/myApp.php/v1.0.0/read/company
-http://localhost:8888/slim/app_1/myApp.php/v1.0.0/read/product
+[GET]  http://localhost:8888/slim/app_1/myApp.php/v1.0.0/read/customer
+[GET]  http://localhost:8888/slim/app_1/myApp.php/v1.0.0/read/company
+[GET]  http://localhost:8888/slim/app_1/myApp.php/v1.0.0/read/product
 
-http://localhost:8888/slim/app_1/myApp.php/v1.0.0/update/customer
-http://localhost:8888/slim/app_1/myApp.php/v1.0.0/update/company
-http://localhost:8888/slim/app_1/myApp.php/v1.0.0/update/product
+[POST] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/update/customer
+[POST] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/update/company
+[POST] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/update/product
 
-http://localhost:8888/slim/app_1/myApp.php/v1.0.0/delete/customer
-http://localhost:8888/slim/app_1/myApp.php/v1.0.0/delete/company
-http://localhost:8888/slim/app_1/myApp.php/v1.0.0/delete/product
+[POST] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/delete/customer
+[POST] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/delete/company
+[POST] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/delete/product
+
+[POST] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/add/prescription
+[POST] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/update/prescription
+[POST] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/delete/prescription
+
+[GET]  http://localhost:8888/slim/app_1/myApp.php/v1.0.0/allPrescriptions 
+[GET]  http://localhost:8888/slim/app_1/myApp.php/v1.0.0/allPrescriptions/2 
 
 ```
-
-#### TODO
-
- - prescription API
 
 
 

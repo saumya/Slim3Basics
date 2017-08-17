@@ -454,7 +454,7 @@ $app->group('/v1.0.0', function(){
   });
   //END UPDATE / Edit
   // =============================================================================
-  // DELETE / Edit
+  // DELETE 
   // =============================================================================
   $this->post('/delete/customer',function($request, $response, $args){
     $db = $this->db;
@@ -504,8 +504,14 @@ $app->group('/v1.0.0', function(){
     
     return $sth->rowCount().' records DELETED successfully.';    
   });
-  //END DELETE / Edit
-  // Prescription
+  // =============================================================================
+  // END DELETE
+  // =============================================================================
+  // ================================================
+  // Prescription | app_visit is TableName | START
+  // ================================================
+  // CREATE
+  // ===========
   $this->post('/add/prescription',function($request, $response, $args){
     //
     $dbUtil = new DButil('saumya');
@@ -531,8 +537,98 @@ $app->group('/v1.0.0', function(){
     $newResponse = $response->withJson($input);
     return $newResponse;
   });
-  //END Prescription
-  //
+  // ===========
+  // UPDATE
+  // ===========
+  $this->post('/update/prescription',function($request, $response, $args){
+
+    $dbUtil = new DButil('saumya');
+    $pdo = $dbUtil->getConnection($this->db);
+
+    $userData = ($request->getParsedBody());
+
+    $sql = "UPDATE `app_visit` 
+            SET `id_customer`= :customerId, 
+                `p_date`= :prescriptionDate,
+                `symptom`= :d_symptom, 
+                `prescription`= :d_prescription,  
+                `note`= :d_note 
+            WHERE `id`= :did";
+
+    $sth = $pdo->prepare($sql);
+    
+    $sth->bindParam("customerId", $userData['customer_id']);
+    $sth->bindParam("prescriptionDate", $userData['prescription_date']); // prescription_date format - 2017-12-13, YYYY-MM-DD
+    $sth->bindParam("d_symptom", $userData['customer_symptom']);
+    $sth->bindParam("d_prescription", $userData['doctor_prescription']);
+    $sth->bindParam("d_note", $userData['customer_note']);
+    $sth->bindParam("did", $userData['id']);
+    
+    $sth->execute();
+    $updateCount = $sth->rowCount();
+
+    $sth = null; $pdo = null;
+    
+    return $updateCount.' records UPDATED successfully.';    
+  });
+  // ===========
+  // DELETE
+  // ===========
+  $this->post('/delete/prescription',function($request, $response, $args){
+    $dbUtil = new DButil('saumya');
+    $pdo = $dbUtil->getConnection($this->db);
+
+    $userData = ($request->getParsedBody());
+
+    $sql = "DELETE FROM `app_visit` WHERE `id` = :did";
+    
+    $sth = $pdo->prepare($sql);
+    $sth->bindParam("did", $userData['id']);
+    $sth->execute();
+    $updateCount = $sth->rowCount();
+
+    $sth = null; $pdo = null;
+    
+    return $updateCount.' records DELETED successfully.';    
+  });
+  // ===========
+  // READ
+  // ===========
+  $this->get('/allPrescriptions[/{customer_id}]',function($request, $response, $args){
+    $dbUtil = new DButil('saumya');
+    $pdo = $dbUtil->getConnection($this->db);
+
+    //$userData = ($request->getParsedBody());
+    //var_dump($userData);
+
+    //var_dump($args);
+    //var_dump($args['customer_id']);
+
+    $sql = "SELECT * FROM `app_visit`";
+    if ($args['customer_id'] == NULL) {
+      // Do Nothing
+    }else{
+      $cid = $args['customer_id'];
+      $sql = "SELECT * FROM `app_visit` WHERE `id_customer` = $cid";
+    }
+    
+    $sth = $pdo->prepare($sql);
+    //$sth->bindParam("did", $userData['id']);
+    $sth->execute();
+    $allResults = $sth->fetchAll();
+
+    $sth = null; $pdo = null;
+
+    $newResponse = $response->withHeader('Content-type', 'application/json');
+    $newResponse = $response->withStatus(200);
+    $newResponse = $response->withJson($allResults);
+    
+    return $newResponse;    
+  });
+  // ================================================
+  // Prescription | app_visit is TableName | END
+  // ================================================
+  
 });
 
 ?>
