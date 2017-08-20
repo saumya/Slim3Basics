@@ -469,8 +469,21 @@ $app->group('/v1.0.0', function(){
     $sth = $pdo->prepare($sql);
     $sth->bindParam("did", $userData['id']);
     $sth->execute();
+
+    //=============
+    //$allResults = $sth->fetchAll();
+    $allResults = array("NumRecordsDeleted"=>$sth->rowCount()) ;
+
+    $sth = null;
+    $pdo = null;
     
-    return $sth->rowCount().' records DELETED successfully.'; 
+    $newResponse = $response->withHeader('Content-type', 'application/json');
+    $newResponse = $response->withStatus(200);
+    $newResponse = $response->withJson($allResults);
+    //=============
+    
+    //return $sth->rowCount().' records DELETED successfully.'; 
+    return $newResponse;
   });
   $this->post('/delete/company',function($request, $response, $args){
     $db = $this->db;
