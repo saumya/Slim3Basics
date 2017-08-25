@@ -515,7 +515,19 @@ $app->group('/v1.0.0', function(){
     $sth->bindParam("did", $userData['id']);
     $sth->execute();
     
-    return $sth->rowCount().' records DELETED successfully.';    
+    //return $sth->rowCount().' records DELETED successfully.'; 
+    $allResults = array("NumRecordsDeleted"=>$sth->rowCount()) ;
+
+    $sth = null;
+    $pdo = null;
+    
+    $newResponse = $response->withHeader('Content-type', 'application/json');
+    $newResponse = $response->withStatus(200);
+    $newResponse = $response->withJson($allResults);
+    //=============
+    
+    //return $sth->rowCount().' records DELETED successfully.'; 
+    return $newResponse;   
   });
   // =============================================================================
   // END DELETE
