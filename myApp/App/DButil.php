@@ -15,7 +15,7 @@ class DButil
 	
 	function __construct($argument)
 	{
-		echo 'DButil constructor '."$argument !";
+		//echo 'DButil constructor '."$argument !";
 	}
 
     public function getConnection($db):PDO{

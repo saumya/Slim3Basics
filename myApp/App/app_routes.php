@@ -273,7 +273,10 @@ $app->group('/v1.0.0', function(){
     //
     $sth = null; $pdo = null;
     //
+    $newResponse = $response->withHeader('Content-type', 'application/json');
+    $newResponse = $response->withStatus(200);
     $newResponse = $response->withJson($input);
+    //
     return $newResponse;
   });
   $this->post('/add/product_sold',function($request, $response, $args){
