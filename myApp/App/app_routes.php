@@ -287,11 +287,12 @@ $app->group('/v1.0.0', function(){
     $userData = ($request->getParsedBody());
     //
     //$sql = "INSERT INTO app_product_bought (table_column_name) VALUES (:userValue)";
-    $sql = "INSERT INTO app_product_sold (product_id,quantity,s_date) VALUES (:soldId,:soldQuantity,:soldDate)";
+    $sql = "INSERT INTO app_product_sold (product_id,customer_id,quantity,s_date) VALUES (:soldId,:soldToPersonId,:soldQuantity,:soldDate)";
     $sth = $pdo->prepare($sql);
     //
     $sth->bindParam("soldId", $userData['sold_id']);
     $sth->bindParam("soldQuantity", $userData['sold_quantity']);
+    $sth->bindParam("soldToPersonId", $userData['sold_to_person_id']);
     $sth->bindParam("soldDate", $userData['sold_date']); // sold_date format - 2017-12-13, YYYY-MM-DD
     $sth->execute();
     //
