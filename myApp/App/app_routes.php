@@ -665,7 +665,38 @@ $app->group('/v1.0.0', function(){
     return $newResponse;    
   });
   // ================================================
-  // Prescription | app_visit is TableName | END
+  // Prescription | app_visit is TableName | END 
+  // ================================================
+  // ================================================
+  // Report | TableName: app_product_sold  | START >>>
+  // ================================================
+  $this->get('/allSold[/{customer_id}]',function($request, $response, $args){
+    $dbUtil = new DButil('saumya');
+    
+    $pdo = $dbUtil->getConnection($this->db);
+    $sql = "SELECT * FROM `app_product_sold`";
+
+    if ($args['customer_id'] == NULL) {
+      // Do Nothing
+    }else{
+      $cid = $args['customer_id'];
+      $sql = "SELECT * FROM `app_product_sold` WHERE `customer_id` = $cid";
+    }
+    
+    $sth = $pdo->prepare($sql);
+    $sth->execute();
+    $allResults = $sth->fetchAll();
+    
+    $sth = null; $pdo = null;
+
+    $newResponse = $response->withHeader('Content-type', 'application/json');
+    $newResponse = $response->withStatus(200);
+    $newResponse = $response->withJson($allResults);
+    
+    return $newResponse;    
+  });  
+  // ================================================
+  // Report | TableName: app_product_sold  | END <<<<<
   // ================================================
   
 });
