@@ -694,6 +694,31 @@ $app->group('/v1.0.0', function(){
     $newResponse = $response->withJson($allResults);
     
     return $newResponse;    
+  });
+  $this->get('/allBought[/{customer_id}]',function($request, $response, $args){
+    $dbUtil = new DButil('saumya');
+    
+    $pdo = $dbUtil->getConnection($this->db);
+    $sql = "SELECT * FROM `app_product_bought`";
+
+    if ($args['customer_id'] == NULL) {
+      // Do Nothing
+    }else{
+      $cid = $args['customer_id'];
+      $sql = "SELECT * FROM `app_product_bought` WHERE `customer_id` = $cid";
+    }
+    
+    $sth = $pdo->prepare($sql);
+    $sth->execute();
+    $allResults = $sth->fetchAll();
+    
+    $sth = null; $pdo = null;
+
+    $newResponse = $response->withHeader('Content-type', 'application/json');
+    $newResponse = $response->withStatus(200);
+    $newResponse = $response->withJson($allResults);
+    
+    return $newResponse;    
   });  
   // ================================================
   // Report | TableName: app_product_sold  | END <<<<<
