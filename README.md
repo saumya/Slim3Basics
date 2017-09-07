@@ -64,6 +64,13 @@ The CRUD API
 
 ```
 
+Reports API
+
+```
+[GET] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/boughtByDate/2017-09-06
+[GET] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/soldByDate/2017-09-05
+```
+
 
 
 
