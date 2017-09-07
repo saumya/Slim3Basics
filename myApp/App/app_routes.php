@@ -260,7 +260,7 @@ $app->group('/v1.0.0', function(){
     //
     $userData = ($request->getParsedBody());
     //
-    //$sql = "INSERT INTO app_product_bought (table_column_name) VALUES (:userValue)";
+    //$sql = "INSERT INTO table_name (table_column_name) VALUES (:userValue)";
     $sql = "INSERT INTO app_product_bought (product_id,quantity,b_date) VALUES (:boughtId,:boughtQuantity,:boughtDate)";
     $sth = $pdo->prepare($sql);
     //
@@ -286,7 +286,7 @@ $app->group('/v1.0.0', function(){
     //
     $userData = ($request->getParsedBody());
     //
-    //$sql = "INSERT INTO app_product_bought (table_column_name) VALUES (:userValue)";
+    //$sql = "INSERT INTO table_name (table_column_name) VALUES (:userValue)";
     $sql = "INSERT INTO app_product_sold (product_id,customer_id,quantity,s_date) VALUES (:soldId,:soldToPersonId,:soldQuantity,:soldDate)";
     $sth = $pdo->prepare($sql);
     //
@@ -558,7 +558,7 @@ $app->group('/v1.0.0', function(){
     //
     $userData = ($request->getParsedBody());
     //
-    //$sql = "INSERT INTO app_product_bought (table_column_name) VALUES (:userValue)";
+    //$sql = "INSERT INTO table_name (table_column_name) VALUES (:userValue)";
     $sql = "INSERT INTO app_visit (id_customer,p_date,symptom,prescription,note) VALUES (:customerId,:prescriptionDate,:symptom,:prescription,:note)";
     $sth = $pdo->prepare($sql);
     //
