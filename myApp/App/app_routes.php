@@ -719,7 +719,52 @@ $app->group('/v1.0.0', function(){
     $newResponse = $response->withJson($allResults);
     
     return $newResponse;    
-  });  
+  }); 
+  // by date
+  // ====== Bought ======== by date
+  $this->get('/boughtByDate/{ddate}',function($request, $response, $args){
+    $dbUtil = new DButil('saumya');
+    $pdo = $dbUtil->getConnection($this->db);
+
+    $cdate = $args['ddate'];
+    $sql = "SELECT * FROM `app_product_bought` WHERE `b_date` = '$cdate' ";
+    
+    $sth = $pdo->prepare($sql);
+    $sth->execute();
+    $allResults = $sth->fetchAll();
+    
+    $sth = null; $pdo = null;
+
+    $newResponse = $response->withHeader('Content-type', 'application/json');
+    $newResponse = $response->withStatus(200);
+    $newResponse = $response->withJson($allResults);
+    
+    //$newResponse = $cdate;
+
+    return $newResponse;    
+  });
+  // ====== Sold ======== by date 
+  $this->get('/soldByDate/{ddate}',function($request, $response, $args){
+    $dbUtil = new DButil('saumya');
+    $pdo = $dbUtil->getConnection($this->db);
+
+    $cdate = $args['ddate'];
+    $sql = "SELECT * FROM `app_product_sold` WHERE `s_date` = '$cdate' ";
+    
+    $sth = $pdo->prepare($sql);
+    $sth->execute();
+    $allResults = $sth->fetchAll();
+    
+    $sth = null; $pdo = null;
+
+    $newResponse = $response->withHeader('Content-type', 'application/json');
+    $newResponse = $response->withStatus(200);
+    $newResponse = $response->withJson($allResults);
+    
+    //$newResponse = $cdate;
+
+    return $newResponse;    
+  }); 
   // ================================================
   // Report | TableName: app_product_sold  | END <<<<<
   // ================================================
