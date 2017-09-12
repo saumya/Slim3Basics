@@ -72,6 +72,7 @@ Reports API
 ```
 
 Todo: 
+ - API for report
  - Analytics API 
 
 
