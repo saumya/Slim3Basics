@@ -73,7 +73,8 @@ Reports API
 
 Todo: 
  - API for report
- - Analytics API 
+ - Analytics API
+ - Research for server side rendering 
 
 
 
