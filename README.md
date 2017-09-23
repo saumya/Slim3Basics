@@ -71,10 +71,9 @@ Reports API
 [GET] http://localhost:8888/slim/app_1/myApp.php/v1.0.0/soldByDate/2017-09-05
 ```
 
-Todo: 
- - API for report
- - Analytics API
- - Research for server side rendering 
+
+TODO:
+
 
 
 
