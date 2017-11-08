@@ -1,6 +1,7 @@
 Slim 3, Basics.
 ===============
 
+
 An Application using [Slim 3][1] framework using [Composer][3]. Here is the [official docs][2] as, how to install.
 
  - First of all, install `Composer` locally in a folder.
